@@ -16,14 +16,17 @@ if st.button("Buscar"):
         st.warning("Por favor ingrese un texto para buscar.")
     else:
         try:
-            resultados = dbx.files_search_v2(query=consulta)
+            resultados = dbx.files_search_v2(
+                query=consulta,
+                options={"filename_only": False}
+            )
             if not resultados.matches:
                 st.info("No se encontraron archivos.")
             else:
                 st.success(f"{len(resultados.matches)} archivo(s) encontrados:")
                 for match in resultados.matches:
                     archivo = match.metadata.get_metadata()
-                    st.write(f"📄 {archivo.name}")
-                    st.code(archivo.path_display)
+                    st.write(f"📄 **{archivo.name}**")
+                    st.code(f"📁 Ruta: {archivo.path_display}")
         except Exception as e:
             st.error(f"Error: {e}")
